@@ -20,7 +20,7 @@ What was used:
 
 
 
-## 1. On-Premises Setup
+##  On-Premises Setup
 ### **Emulating On-Prem Active Directory Infrastructure Using Azure Services**
 
 To replicate a realistic enterprise environment, I deployed an on-premises-style Active Directory setup in Azure using Active Directory Domain Services (AD DS).
@@ -38,7 +38,7 @@ To replicate a realistic enterprise environment, I deployed an on-premises-style
 
 <br><br>
 
-## 2. Hybrid Integration
+## Hybrid Integration
 ### **Setting Up Hybrid Windows Environment.**
 
 In this setup, we configured a Windows 11 Client to join the on-premises domain, enabling centralized management and secure domain-based access. We then created Entra ID users, security groups, and assigned roles to establish cloud-based identity management. By installing and configuring Entra Connect on the domain controller, we synchronized on-premises Active Directory with Entra ID, ensuring unified identities across environments. This integration enables seamless authentication, consistent access control, and a streamlined hybrid identity infrastructure.
@@ -55,7 +55,7 @@ In this setup, we configured a Windows 11 Client to join the on-premises domain,
 
 <br><br>
 
-## 3. Seamless Single Sign-On (SSO)
+## Seamless Single Sign-On (SSO)
 ### **Setting Up a Seamless SSO in a Hybrid Windows Environment**
 
 This project focuses on advancing the hybrid identity environment by integrating Windows 11 client into the Entra ecosystem and enabling Single Sign-On (SSO).  This strengthens the link between on-premises Active Directory and Entra ID, ensuring secure, unified access to both local and cloud resources.  By using hybrid identities, the initiative streamlines authentication, enhances security, and minimizes the need for multiple logins, creating a smoother user experience.
@@ -78,7 +78,7 @@ This project focuses on advancing the hybrid identity environment by integrating
 <br><br>
 
 
-## 4. Maintenance and Security
+## Maintenance and Security
 
 After setting up SSO, I went back and focused on strengthening identity security by enabling Multi-Factor Authentication (MFA) for the rootadmin1@duckdown.org account.  Previously, this highly privileged account relied only on a password for login, which posed a significant risk.  By configuring targeted MFA in Entra and setting up Microsoft Authenticator, I added an extra layer of protection to safeguard against unauthorized access.  I validated the configuration by successfully logging into the Azure Portal with MFA enforced.  This task underscores the critical role of securing privileged accounts and aligns with refining IAM practices such as enforcing password policies and ongoing access reviews.
 
