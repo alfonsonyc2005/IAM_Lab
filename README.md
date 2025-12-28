@@ -1,86 +1,127 @@
-# IAM Journey: From On-Premises to Modern Hybrid Identity with SSO
-## Introduction
+# IAM Journey: Hybrid Identity with Entra ID and SSO
 
-This portfolio documents the development of a hybrid identity and access management system for the fictional domain, corp.duckdown.org, demonstrating best practices from on-premises Active Directory setups to advanced Single Sign-On (SSO) configurations in the cloud.
+## Overview
+This project demonstrates the design and implementation of a **hybrid identity and access management (IAM) architecture** using on-premises Active Directory integrated with **Microsoft Entra ID**, culminating in **Single Sign-On (SSO)** for a SaaS application (Salesforce).
 
-What was used:
+The lab models real-world enterprise identity practices, including directory synchronization, device registration, federated authentication, and privileged account security.
+
+**Domain:** corp.duckdown.org (lab environment)
+
+---
+
+## Architecture
+![Hybrid Identity Architecture](https://i.imgur.com/1pF3nGN.png)
+
+---
+
+## Technologies Used
 - Microsoft Entra ID
-- Windows Server 2019 (DC)
-- Windows 11 Client
-- Organizational Units / 2 Users
-- Salesforce account
-- Entra Connect Sync
-  
-![Cloud Honeynet / SOC](https://i.imgur.com/1fD8G4I.png)
-
+- Entra Connect (Azure AD Connect)
+- Windows Server 2019 (AD DS, DNS)
+- Windows 11 (Hybrid Azure AD Join)
+- Salesforce (SAML SSO)
+- Microsoft Authenticator (MFA)
 
 ---
 
-<br><br>
+## On-Premises Identity Foundation
+### Active Directory Deployment
 
+- Deployed on-premises Active Directory using Windows Server 2019
+- Implemented DNS and domain services to support identity authentication
+- Created organizational units, users, and security groups
+- Applied role-based access control via group membership
 
+**Outcome:** Established a realistic enterprise identity foundation for hybrid integration.
 
-##  On-Premises Setup
-### **Emulating On-Prem Active Directory Infrastructure Using Azure Services**
+<details>
+<summary><strong>Implementation details</strong></summary>
 
-To replicate a realistic enterprise environment, I deployed an on-premises-style Active Directory setup in Azure using Active Directory Domain Services (AD DS).
+- Installed AD DS and DNS using Server Manager
+- Configured domain controller networking
+- Joined a Windows 11 client to the domain
+- Created users and assigned security groups for access control
 
-1. **Domain Controller Configuration** - Deployed a Windows Server 2019 VM with AD DS and DNS via Server Manager.  Configured a static IP (10.0.0.4), subnet mask (255.255.255.0), and a default gateway (10.0.0.1).
-2. **Client Workstation Setup** - Deployed a Windows 11 VM, joined it to the domain, and configured IP (10.0.0.5 via DHCP), subnet mask (255.255.255.0), default gateway (10.0.0.1), and DNS.
-3. **Security Group Management** - Created security groups and applied role-based permissions.
-4. **User Onboarding** - Added users to the domain and assigned them to appropriate security groups for access control.
-
-
-![Architecture Diagram](https://i.imgur.com/1pF3nGN.png)
-
----
-
-
-<br><br>
-
-## Hybrid Integration
-### **Setting Up Hybrid Windows Environment.**
-
-In this setup, we configured a Windows 11 Client to join the on-premises domain, enabling centralized management and secure domain-based access. We then created Entra ID users, security groups, and assigned roles to establish cloud-based identity management. By installing and configuring Entra Connect on the domain controller, we synchronized on-premises Active Directory with Entra ID, ensuring unified identities across environments. This integration enables seamless authentication, consistent access control, and a streamlined hybrid identity infrastructure.
-
-1. **Configured Windows 11 Client** network settings with a static DNS pointing to the domain controller and joined it to the domain.
-2. **Enabled Remote Desktop Protocol (RDP) access** for domain users and verified domain login functionality.
-3. **Created Entra ID users, security groups**, and assigned appropriate roles for access control.
-4. **Installed Entra Connect** on the domain controller and connected it to both Entra ID and on-premises Active Directory using admin credentials.
-5. **Verified successful synchronization** of on-premises users and groups into Entra ID, confirming hybrid environment integration.
-
-![Architecture Diagram](https://i.imgur.com/AHfGsXu.png)
+</details>
 
 ---
 
-<br><br>
+## Hybrid Identity Integration
+### Active Directory + Entra ID Synchronization
+
+- Integrated on-prem AD with Microsoft Entra ID using Entra Connect
+- Synchronized users and security groups to the cloud
+- Enabled centralized identity management across environments
+- Validated hybrid authentication from domain-joined client
+
+**Outcome:** Unified identity lifecycle across on-premises and cloud environments.
+
+![Hybrid Sync Architecture](https://i.imgur.com/AHfGsXu.png)
+
+<details>
+<summary><strong>Implementation details</strong></summary>
+
+- Installed Entra Connect on the domain controller
+- Connected Entra ID tenant using administrative credentials
+- Configured directory synchronization scope
+- Verified synchronized users and groups in Entra ID
+- Enabled RDP access for domain users and validated login
+
+</details>
+
+---
 
 ## Seamless Single Sign-On (SSO)
-### **Setting Up a Seamless SSO in a Hybrid Windows Environment**
+### Federated Access to Salesforce
 
-This project focuses on advancing the hybrid identity environment by integrating Windows 11 client into the Entra ecosystem and enabling Single Sign-On (SSO).  This strengthens the link between on-premises Active Directory and Entra ID, ensuring secure, unified access to both local and cloud resources.  By using hybrid identities, the initiative streamlines authentication, enhances security, and minimizes the need for multiple logins, creating a smoother user experience.
+- Registered Salesforce as an Enterprise Application in Entra ID
+- Configured SAML-based Single Sign-On
+- Enabled federated authentication using Entra-managed identities
+- Validated seamless access without re-authentication
 
-1. **Registering Device into Entra** - We use hybrid identity [rootadmin1@duckdown.org](mailto:rootadmin1@duckdown.org) to log into Windows 11 device, registering it within the cloud environment.  This step is crucial, as it not only brings the user identity into the hybrid fold but also extends hybrid capabilities to the device itself.
-2. **Salesforce user creation** - created a user with third-party vendor, Salesforce.
-3. **Entra ID SSO for Salesforce** - We start by configuring Enterprise Applications in the Entra tenant, adding Salesforce as an application SSO.
-   
-    - We add the Salesforce Identifier, reply URL
-    - Download SAML Certificate and Federation Metadata XML
-    - In Salesforce, enable SSO, upload SAML Certificate and Federation Metadata XML
-    - Provision Salesforce in Microsoft Azure Enterprise Application
-      
-5. **Validation** - Verified by opening incognito web browser and signing into Salesforce login page with user account.  It does not ask for MFA and logs right into Salesforce.
+**Outcome:** Users authenticate once via Entra ID and gain access to SaaS resources without additional login prompts.
 
-![Architecture Diagram](https://i.imgur.com/1fD8G4I.png)
+![SSO Architecture](https://i.imgur.com/1fD8G4I.png)
+
+<details>
+<summary><strong>Implementation details</strong></summary>
+
+- Registered hybrid-joined Windows 11 device in Entra ID
+- Created Salesforce test user
+- Configured SAML identifiers and reply URLs
+- Downloaded SAML certificate and federation metadata from Entra ID
+- Enabled SSO in Salesforce and uploaded metadata
+- Validated login via incognito browser session
+
+</details>
 
 ---
 
-<br><br>
+## Identity Security Hardening
+### Privileged Account Protection
 
+- Enforced Multi-Factor Authentication (MFA) on privileged Entra ID accounts
+- Configured Microsoft Authenticator for admin access
+- Validated MFA enforcement during Azure portal login
 
-## Maintenance and Security
+**Outcome:** Reduced risk associated with credential compromise and aligned with IAM security best practices.
 
-After setting up SSO, I went back and focused on strengthening identity security by enabling Multi-Factor Authentication (MFA) for the rootadmin1@duckdown.org account.  Previously, this highly privileged account relied only on a password for login, which posed a significant risk.  By configuring targeted MFA in Entra and setting up Microsoft Authenticator, I added an extra layer of protection to safeguard against unauthorized access.  I validated the configuration by successfully logging into the Azure Portal with MFA enforced.  This task underscores the critical role of securing privileged accounts and aligns with refining IAM practices such as enforcing password policies and ongoing access reviews.
+<details>
+<summary><strong>Implementation details</strong></summary>
 
-Sensitive accounts, especially global admin roles, are prime targets for attackers.  Relying solely on password is not enough in today's threat landscape.  Regularly implementing updates, tightening security configurations like MFA, and continuously monitoring for vulnerabilities are essential to maintaining a resilient IAM system.  These proactive measures ensure that even if credentials are compromised, security controls remain in place to prevent unauthorized access, protecting both organizational data and infrastructure.
+- Enabled targeted MFA policy for global admin account
+- Registered Microsoft Authenticator device
+- Verified MFA challenge during privileged login
+
+</details>
+
+---
+
+## What This Project Demonstrates
+- Hybrid identity architecture design
+- Active Directory and Entra ID integration
+- SaaS federation using SAML SSO
+- Privileged access security with MFA
+- Enterprise IAM thinking beyond basic lab setup
+
 
